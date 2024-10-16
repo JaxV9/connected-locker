@@ -1,0 +1,13 @@
+.some-btn {
+    padding: 8px 16px;
+    background-color: #FF6833;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    color: white;
+}
+
+.some-btn:hover {
+    background-color: #FF6833;
+}

@@ -1,0 +1,63 @@
+
+.card, .card-clicked {
+    border-radius: 16px;
+    display: flex;
+    width: 200px;
+    height: 200px;
+    transition: all ease 0.2s;
+}
+
+.card-clicked {
+    width: 198px;
+    height: 198px;
+    scale: 0.95;
+    border: 0.5px solid white;
+}
+
+.card-container, .card-container-clicked {
+    background-color: #EE7E00;
+    border-radius: 16px;
+    display: block;
+    display: flex;
+    transition: all ease 0.2s;
+    cursor: pointer;
+    position: relative;
+    margin: auto;
+}
+
+.card-container {
+    width: 200px;
+    height: 200px;
+}
+
+.card-container-clicked {
+    transition: all ease 0.2s;
+    background-color: #d57404;
+    width: 200px;
+    height: 200px;
+    scale: 0.93;
+}
+
+.card-container:hover {
+    scale: 1.01;
+    transition: all ease 0.2s;
+}
+
+.card-content {
+    position: absolute;
+    margin-left: 10%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 28px;
+}
+
+.handle-locker {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: black;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 16px
+}
