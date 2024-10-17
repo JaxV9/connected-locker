@@ -63,3 +63,11 @@
     transform: translateY(-50%);
     right: 16px
 }
+
+
+@media (max-width: 450px) {
+    .card, .card-clicked {
+        width: 300px;
+        height: 300px;
+    }
+}
