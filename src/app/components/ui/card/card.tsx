@@ -6,7 +6,7 @@ type CardPropsType = {
     id: number,
     user: number | null,
     state: string,
-    updateCurrentLockerProps: (locker: number) => void,
+    updateCurrentLockerProps: (id: number | null, isMenuActive: boolean) => void,
     currentLockerProps: number | null
 };
 
@@ -19,7 +19,12 @@ export const Card = ({ id, state, updateCurrentLockerProps, currentLockerProps }
     const ableToClick = ["available", "yours"]
 
     const toggle = () => {
-        updateCurrentLockerProps(id)
+        if(currentLockerProps !== id) {
+            updateCurrentLockerProps(id, true)
+        }
+        if(currentLockerProps === id){
+            updateCurrentLockerProps(null, false)
+        }
     }
 
     useEffect(() => {
