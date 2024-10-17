@@ -1,9 +1,23 @@
 .card-list {
-    width: 70%;
+    width: fit-content;
+    min-width: 70%;
     margin-left: auto;
     margin-right: auto;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 200px));
     column-gap: 28px;
     row-gap: 28px;
+}
+
+@media (max-width: 450px) {
+    .card-list {
+        width: fit-content;
+        min-width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+        display: grid;
+        grid-template-columns: none;
+        column-gap: 28px;
+        row-gap: 28px;
+    }
 }

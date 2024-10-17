@@ -1,19 +1,17 @@
 'use client';
 
-import { Dispatch, SetStateAction } from "react";
-
 type MenuPropsType = {
     menuIsActiveProps: boolean,
-    setMenuIsActiveProps: Dispatch<SetStateAction<boolean>>
+    handleCloseMenuProps: () => void
 }
 
-export const Menu = ({menuIsActiveProps, setMenuIsActiveProps}: MenuPropsType) => {
+export const Menu = ({menuIsActiveProps, handleCloseMenuProps}: MenuPropsType) => {
 
 
     return (
         <>
-        <div className={menuIsActiveProps ? "menu-enabled" : "menu-disabled"} onClick={() => setMenuIsActiveProps(!menuIsActiveProps)}>
-
+        <div className={menuIsActiveProps ? "menu-enabled" : "menu-disabled"}>
+            <div className="cross" onClick={handleCloseMenuProps}></div>
         </div>
         </>
     )

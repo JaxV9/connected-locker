@@ -55,14 +55,19 @@ export default function Home() {
     }
   ]
 
-  const updateCurrentLocker = (id: number) => {
+  const updateCurrentLocker = (id: number | null, isMenuActive: boolean) => {
     setCurrentLocker(id)
-    setMenuIsActive(true)
+    setMenuIsActive(isMenuActive)
+  }
+
+  const handleCloseMenu = () => {
+    setMenuIsActive(!menuIsActive)
+    setCurrentLocker(null)
   }
 
   return (
     <>
-      <Menu menuIsActiveProps={menuIsActive} setMenuIsActiveProps={setMenuIsActive}/>
+      <Menu menuIsActiveProps={menuIsActive} handleCloseMenuProps={handleCloseMenu}/>
       <CardList >
         {lockerList.length > 0 ?
           lockerList.map((locker) => (
