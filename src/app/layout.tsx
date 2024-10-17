@@ -26,6 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <h1 className="title">Connected locker</h1>
         {children}
       </body>
     </html>

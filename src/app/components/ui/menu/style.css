@@ -1,0 +1,34 @@
+.menu-enabled, .menu-disabled {
+    width: 250px;
+    height: 100vh;
+    background-color: #262D34;
+    position: fixed;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 28px;
+    transition: all ease 0.2s;
+    z-index: 2;
+}
+
+.menu-enabled {
+    right: 0;
+}
+
+.menu-disabled {
+    width: 250px;
+    height: 100vh;
+    background-color: #262D34;
+    position: fixed;
+    top: 0;
+    right: -250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 28px;
+    transition: all ease 0.2s;
+    z-index: 2;
+}

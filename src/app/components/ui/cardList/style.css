@@ -3,6 +3,7 @@
     margin-left: auto;
     margin-right: auto;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 28px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 200px));
+    column-gap: 28px;
+    row-gap: 28px;
 }
