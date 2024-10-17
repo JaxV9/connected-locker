@@ -35,3 +35,7 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 # connected-locker
+
+# Raspberry Python code 
+
+Raspberry code is add in Raspberry folder, for install python code, Install IDE Thonny and connect your raspberry to your computer. Next, save python file in Raspberry pico..
