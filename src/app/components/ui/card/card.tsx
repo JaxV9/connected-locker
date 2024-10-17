@@ -5,7 +5,7 @@ import {  useEffect, useState } from "react";
 type CardPropsType = {
     id: number,
     user: number | null,
-    state: string,
+    state: boolean,
     updateCurrentLockerProps: (id: number | null, isMenuActive: boolean) => void,
     currentLockerProps: number | null
 };
@@ -16,7 +16,6 @@ export const Card = ({ id, state, updateCurrentLockerProps, currentLockerProps }
     const [clicked, setClicked] = useState<boolean>(false);
     const [currentBackground, setCurrentBackground] = useState<string>("")
 
-    const ableToClick = ["available", "yours"]
 
     const toggle = () => {
         if(currentLockerProps !== id) {
@@ -28,15 +27,15 @@ export const Card = ({ id, state, updateCurrentLockerProps, currentLockerProps }
     }
 
     useEffect(() => {
-        if(state === "available") {
+        if(state === false) {
             setCurrentBackground('#EE7E00')
         }
-        if(state === "assigned") {
+        if(state === true) {
             setCurrentBackground('#BC1D1C')
         }
-        if(state === "yours") {
-            setCurrentBackground('#1A962A')
-        }
+        // if(state === true && user_id ===) {
+        //     setCurrentBackground('#1A962A')
+        // }
     },[state])
 
     useEffect(() => {
@@ -49,8 +48,8 @@ export const Card = ({ id, state, updateCurrentLockerProps, currentLockerProps }
 
     return (
         <>
-            <div className={clicked && ableToClick.includes(state) ? "card-clicked" : "card"}>
-                <div className={clicked && state === "available" ? "card-container-clicked" : "card-container"} onClick={toggle}
+            <div className={clicked && state === true ? "card-clicked" : "card"}>
+                <div className={clicked && state === false ? "card-container-clicked" : "card-container"} onClick={toggle}
                 style={{ backgroundColor: currentBackground}}>
                     <div className="card-content">
                         {id}
