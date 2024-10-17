@@ -2,7 +2,7 @@
 @import url('../app/components/ui/btn/style.css');
 @import url('../app/components/ui/cardList/style.css');
 @import url('../app/components/ui/card/style.css');
-
+@import url('../app/components/ui/menu/style.css');
 
 html,
 body {
@@ -16,4 +16,10 @@ body {
 
 h1 {
   color: #FF571A;
+}
+
+.title {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
 }
