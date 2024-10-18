@@ -1,5 +1,5 @@
 export type LockerType = {
     id: number,
-    user: number | null,
-    state: string
+    status: boolean,
+    user_id: number | null
 };

@@ -1,0 +1,21 @@
+export type UserType = {
+    "username": string | null,
+    "id": string,
+    "first_name": string,
+    "last_name": string,
+    "last_page": string,
+    "email": string,
+    "password": string,
+    "location": string | null,
+    "title": string | null,
+    "description": string | null,
+    "tags": string | null,
+    "avatar": string | null,
+    "language": string | null,
+    "appearance": string | null,
+    "theme_light": string | null,
+    "theme_dark": string | null,
+    "tfa_secret": string | null,
+    "status": string,
+    "role": string
+}
