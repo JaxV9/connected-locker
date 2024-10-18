@@ -1,8 +1,9 @@
-from machine import Pin
+from machine import Pin, PWM
 from servo import Servo
 import time
 import network
 import urequests
+import json
 
 wlan = network.WLAN(network.STA_IF)
 wlan.active(True)
@@ -10,7 +11,8 @@ wlan.active(True)
 ssid = 'PoleDeVinci_Private'
 password = 'Creatvive_Lab_2024'
 wlan.connect(ssid, password)
-url = "http://192.168.100.131:3000/"
+Locker_id= 1
+url = f"https://directus-ucmn.onrender.com/items/locker/{Locker_id}"
 
 motor = Servo(16)
 button = Pin(17, mode=Pin.IN, pull=Pin.PULL_UP)
@@ -21,8 +23,6 @@ while not wlan.isconnected():
     print('noco')
     time.sleep(1)
 open = False
-
-hearder = {'Authorization': f'Bearer Token {"bmWmB8pgqb1RWJ6TO_eMq0YwhnJ-Knaw"}'}
 
 while True:
 
@@ -41,22 +41,25 @@ while True:
         try:
             print("GET")
 
-            r = urequests.get("http://10.2.104.13:3000/")
+            r = urequests.get(url)
 
             print(r.json())
             response = r.json()
-            print(response['msg'])
-            if response['msg'] == 'open':
-                motor.move(0)
+            print(response['data']['status'])
+            print(type(response['data']['status']))
+            if response['data']['status'] == True:
+                motor.move(90)
                 open = True
                 time.sleep(0.8)
             else:
                 motor.move(0)
+                open = False
 
             r.close()
             time.sleep(1)
         except Exception as e:
             print(e)
     time.sleep(.1)
+
 
 
