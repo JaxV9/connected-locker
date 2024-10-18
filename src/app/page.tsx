@@ -14,16 +14,16 @@ export default function Home() {
   const [currentUser, setCurrentUser] = useState<UserType>()
   const [menuIsActive, setMenuIsActive] = useState<boolean>(false)
   const [lockerList, setLockerList] = useState<LockerType[]>([])
+  const [currentToken, setCurrentToken] = useState<string | null>(localStorage.getItem('access_token'))
 
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiZTk4OTE2LWM3YTctNGFlNi04ZTZiLTBlMWMzYTE1MDA1MyIsInJvbGUiOiI0MjkyNTBiNi1iZDliLTQwMjAtYTA2My0wMzMzZDZkYjdhY2IiLCJhcHBfYWNjZXNzIjp0cnVlLCJhZG1pbl9hY2Nlc3MiOmZhbHNlLCJpYXQiOjE3MjkxNzM3NzYsImV4cCI6MTcyOTE3NDY3NiwiaXNzIjoiZGlyZWN0dXMifQ.krGVdlw14DKLJ1vVh8r5DhyCztbYrGbmb7Hwh1P5Yvw"
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiZTk4OTE2LWM3YTctNGFlNi04ZTZiLTBlMWMzYTE1MDA1MyIsInJvbGUiOiI0MjkyNTBiNi1iZDliLTQwMjAtYTA2My0wMzMzZDZkYjdhY2IiLCJhcHBfYWNjZXNzIjp0cnVlLCJhZG1pbl9hY2Nlc3MiOmZhbHNlLCJpYXQiOjE3MjkyNTEwNDUsImV4cCI6MTcyOTc2OTQ0NSwiaXNzIjoiZGlyZWN0dXMifQ.klt6Kkn-6qck-gBCgeo2BklApzpGdeeJPYMWKOA5UNY";
 
   const fetchLockerList = async () => {
-    const headers = { 'Authorization': 'Bearer ' + token };
     try {
-      const response = await fetch(`https://directus-ucmn.onrender.com/items/locker`, { headers })
+      const response = await fetch(`https://directus-ucmn.onrender.com/items/locker`)
       const data = await response.json()
-      
-      if(data !== undefined) {
+
+      if (data !== undefined) {
         setLockerList(data.data)
       }
 
@@ -38,10 +38,30 @@ export default function Home() {
       const response = await fetch(`https://directus-ucmn.onrender.com/users/me`, { headers })
       const data = await response.json()
 
-      if(data !== undefined) {
+      if (data !== undefined) {
         setCurrentUser(data.data)
         localStorage.setItem('user_id', data.data.id)
       }
+    } catch {
+      console.log("error")
+    }
+  }
+
+  const loginUser = async () => {
+    const body = {
+      "email": "test@example.com",
+      "password": "d1r3ctu5"
+    }
+    try {
+      const response = await fetch(`https://directus-ucmn.onrender.com/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      })
+      const data = await response.json()
+      localStorage.setItem('access_token', data.data.access_token)
     } catch {
       console.log("error")
     }
@@ -58,19 +78,25 @@ export default function Home() {
   }
 
   useEffect(() => {
-    fetchCurrentUser()
-    fetchLockerList()
-  }, [])
+
+    if (currentToken === null) {
+      loginUser()
+    }
+    if (currentToken !== null || currentToken !== "") {
+      fetchCurrentUser()
+      fetchLockerList()
+    }
+  }, [currentToken])
 
 
   return (
     <>
-      <Menu menuIsActiveProps={menuIsActive} handleCloseMenuProps={handleCloseMenu} />
+      <Menu currentLockerProps={currentLocker} menuIsActiveProps={menuIsActive} handleCloseMenuProps={handleCloseMenu} />
       <CardList >
         {lockerList.length > 0 ?
           lockerList.map((locker) => (
             <Card key={locker.id} updateCurrentLockerProps={updateCurrentLocker} currentLockerProps={currentLocker}
-              id={locker.id} user={locker.user_id} state={locker.status} />
+              id={locker.id} lockerProps={locker}/>
           ))
           : null}
       </CardList>
