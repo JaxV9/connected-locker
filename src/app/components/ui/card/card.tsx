@@ -43,7 +43,10 @@ export const Card = ({ lockerProps, updateCurrentLockerProps, currentLockerProps
                 <div className={lockerProps === currentLockerProps ? "card-container-clicked" : "card-container"} onClick={toggle}
                 style={{ backgroundColor: currentBackground}}>
                     <div className="card-content">
-                        {lockerProps.id}
+                        {lockerProps.id} 
+                        {lockerProps.status === true &&
+                        lockerProps.user_id !== localStorage.getItem('user_id')? ": reserved" : null}
+                        {lockerProps.user_id === localStorage.getItem('user_id') ? ": yours" : null}
                     </div>
                     <div className="handle-locker"></div>
                 </div>
