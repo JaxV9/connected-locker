@@ -1,7 +1,7 @@
 'use client';
 
 import { LockerType } from "@/app/model/locker";
-// import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 type MenuPropsType = {
   currentLockerProps: LockerType | null,
@@ -13,10 +13,14 @@ type MenuPropsType = {
 
 export const Menu = ({ currentUserIdProps, refreshLockerList, currentLockerProps, menuIsActiveProps, handleCloseMenuProps }: MenuPropsType) => {
 
-  const newReservation = async () => {
+  const [reservationIsPending, setReservationIsPending] = useState<boolean>(false)
+  const [countDown, setCountDown] = useState<number>(10)
+  const [reservationCompleted, setReservationCompleted] = useState<boolean | null>(null)
+
+  const newReservation = async (user: string | undefined | null) => {
     const body = {
-      "status": true,
-      "user_id": currentUserIdProps
+      "status": false,
+      "user_id": user
     }
     try {
       await fetch(`https://directus-ucmn.onrender.com/items/locker/${currentLockerProps?.id}`, {
@@ -27,21 +31,70 @@ export const Menu = ({ currentUserIdProps, refreshLockerList, currentLockerProps
         },
         body: JSON.stringify(body)
       })
-      refreshLockerList()
     } catch {
       console.log("error")
     }
   }
-  
-  const test = () => {
-    console.log(currentUserIdProps)
+
+  const fetchLocker = async () => {
+    try {
+      const response = await fetch(`https://directus-ucmn.onrender.com/items/locker/${currentLockerProps?.id}`)
+      const data = await response.json()
+
+      if (data !== undefined && data.data.status === false) {
+        newReservation(null)
+        setReservationCompleted(false)
+      }
+      if (data !== undefined && data.data.status === true) {
+        setReservationCompleted(true)
+      }
+
+    } catch {
+      console.log("error")
+    }
   }
+
+
+  useEffect(() => {
+    if (countDown > 0 && reservationIsPending === true) {
+      const timer = setInterval(() => {
+        setCountDown((prevCompte) => prevCompte - 1);
+      }, 1000);
+
+      return () => clearInterval(timer);
+    } else {
+      setReservationIsPending(false)
+    }
+  }, [reservationIsPending, countDown, currentUserIdProps]);
+
+  useEffect(() => {
+    if (reservationCompleted === true || reservationCompleted === false) {
+      setReservationCompleted(null)
+    }
+  }, [currentLockerProps]);
+
+  const handleAfterCountDown = async () => {
+    setCountDown(10)
+    refreshLockerList()
+    fetchLocker()
+  }
+
+  useEffect(() => {
+    if (countDown === 0) {
+      handleAfterCountDown()
+    }
+  }, [countDown])
+
+  useEffect(() => {
+    if (reservationIsPending === true) {
+      newReservation(currentUserIdProps)
+    }
+  }, [reservationIsPending])
 
   return (
     <>
 
       <div className={menuIsActiveProps ? "menu-enabled" : "menu-disabled"}>
-      <button onClick={test}>test</button>
         <div className="cross" onClick={handleCloseMenuProps}></div>
         <div className="menu-content">
           {currentLockerProps?.status && currentLockerProps.user_id !== localStorage.getItem('user_id') ?
@@ -56,12 +109,25 @@ export const Menu = ({ currentUserIdProps, refreshLockerList, currentLockerProps
           }
           {
             !currentLockerProps?.status ?
-              <div>
-                <h2 className="menu-title">{currentLockerProps?.id} : This locker is available</h2>
-                <button className="reserve-btn" onClick={newReservation}>Take it</button>
-              </div>
+              <h2 className="menu-title">{currentLockerProps?.id} : This locker is available</h2>
               : null
           }
+          {
+            !currentLockerProps?.status && !reservationIsPending?
+              <button className="reserve-btn" onClick={() => setReservationIsPending(true)}>Take it</button>
+              : null
+          }
+          {
+            reservationIsPending ?
+              <p>You have {countDown}s to open your locker, with the physical button.</p>
+              : null
+          }
+          {reservationCompleted ?
+            <p>The locker is reserved !</p>
+            : null}
+          {reservationCompleted === false ?
+            <p>You don&apos;t have push the button...</p>
+            : null}
         </div>
       </div>
     </>

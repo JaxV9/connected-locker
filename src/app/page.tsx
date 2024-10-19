@@ -75,7 +75,6 @@ export default function Home() {
   }
 
   useEffect(() => {
-
     if (currentToken === null) {
       loginUser()
     }
@@ -91,22 +90,8 @@ export default function Home() {
     }
   }, [currentUserId])
 
-  // useEffect(() => {
-  //   if(currentLocker !== null){
-  //     const test = lockerList.filter((value) => value.id === currentLocker.id)
-  //     console.log("filter" + JSON.stringify(test))
-  //     console.log("current :" + JSON.stringify(currentLocker))
-  //     console.log("new list :" + JSON.stringify(lockerList))
-  //   }
-  // },[lockerList])
-
-  const test = () => {
-    console.log(currentUserId)
-  }
-
   return (
     <>
-      <button onClick={test}>test</button>
       <Menu currentUserIdProps={currentUserId} refreshLockerList={fetchLockerList} currentLockerProps={currentLocker} menuIsActiveProps={menuIsActive} handleCloseMenuProps={handleCloseMenu} />
       <CardList >
         {lockerList.length > 0 ?
