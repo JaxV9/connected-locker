@@ -66,7 +66,7 @@ export const Menu = ({ currentUserIdProps, refreshLockerList, currentLockerProps
               : null
           }
           {
-            currentLockerProps?.status && !pending ?
+            currentLockerProps?.status && !pending && currentLockerProps.user_id === localStorage.getItem("user_id") ?
               <button className="reserve-btn" onClick={() => editReservation(false, null)}>Free the locker</button>
               : null
           }
