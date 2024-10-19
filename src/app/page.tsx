@@ -5,18 +5,15 @@ import { Card } from "./components/ui/card/card";
 import { CardList } from "./components/ui/cardList/cardList";
 import { LockerType } from "./model/locker";
 import { Menu } from "./components/ui/menu/menu";
-import { UserType } from "./model/user";
 
 
 export default function Home() {
 
-  const [currentLocker, setCurrentLocker] = useState<number | null>(null)
-  const [currentUser, setCurrentUser] = useState<UserType>()
+  const [currentLocker, setCurrentLocker] = useState<LockerType | null>(null)
+  const [currentUserId, setCurrentUserId] = useState<string>()
   const [menuIsActive, setMenuIsActive] = useState<boolean>(false)
   const [lockerList, setLockerList] = useState<LockerType[]>([])
-  const [currentToken, setCurrentToken] = useState<string | null>(localStorage.getItem('access_token'))
-
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiZTk4OTE2LWM3YTctNGFlNi04ZTZiLTBlMWMzYTE1MDA1MyIsInJvbGUiOiI0MjkyNTBiNi1iZDliLTQwMjAtYTA2My0wMzMzZDZkYjdhY2IiLCJhcHBfYWNjZXNzIjp0cnVlLCJhZG1pbl9hY2Nlc3MiOmZhbHNlLCJpYXQiOjE3MjkyNTEwNDUsImV4cCI6MTcyOTc2OTQ0NSwiaXNzIjoiZGlyZWN0dXMifQ.klt6Kkn-6qck-gBCgeo2BklApzpGdeeJPYMWKOA5UNY";
+  const [currentToken, setCurrentToken] = useState<string | null>(null)
 
   const fetchLockerList = async () => {
     try {
@@ -33,14 +30,13 @@ export default function Home() {
   }
 
   const fetchCurrentUser = async () => {
-    const headers = { 'Authorization': 'Bearer ' + token };
+    const headers = { 'Authorization': 'Bearer ' + localStorage.getItem('access_token') };
     try {
       const response = await fetch(`https://directus-ucmn.onrender.com/users/me`, { headers })
       const data = await response.json()
 
       if (data !== undefined) {
-        setCurrentUser(data.data)
-        localStorage.setItem('user_id', data.data.id)
+        setCurrentUserId(data.data.id)
       }
     } catch {
       console.log("error")
@@ -62,13 +58,14 @@ export default function Home() {
       })
       const data = await response.json()
       localStorage.setItem('access_token', data.data.access_token)
+      setCurrentToken(data.data.access_token)
     } catch {
       console.log("error")
     }
   }
 
-  const updateCurrentLocker = (id: number | null, isMenuActive: boolean) => {
-    setCurrentLocker(id)
+  const updateCurrentLocker = (locker: LockerType | null, isMenuActive: boolean) => {
+    setCurrentLocker(locker)
     setMenuIsActive(isMenuActive)
   }
 
@@ -88,15 +85,34 @@ export default function Home() {
     }
   }, [currentToken])
 
+  useEffect(() => {
+    if (currentUserId !== undefined) {
+      localStorage.setItem('user_id', currentUserId?.toString())
+    }
+  }, [currentUserId])
+
+  // useEffect(() => {
+  //   if(currentLocker !== null){
+  //     const test = lockerList.filter((value) => value.id === currentLocker.id)
+  //     console.log("filter" + JSON.stringify(test))
+  //     console.log("current :" + JSON.stringify(currentLocker))
+  //     console.log("new list :" + JSON.stringify(lockerList))
+  //   }
+  // },[lockerList])
+
+  const test = () => {
+    console.log(currentUserId)
+  }
 
   return (
     <>
-      <Menu currentLockerProps={currentLocker} menuIsActiveProps={menuIsActive} handleCloseMenuProps={handleCloseMenu} />
+      <button onClick={test}>test</button>
+      <Menu currentUserIdProps={currentUserId} refreshLockerList={fetchLockerList} currentLockerProps={currentLocker} menuIsActiveProps={menuIsActive} handleCloseMenuProps={handleCloseMenu} />
       <CardList >
         {lockerList.length > 0 ?
           lockerList.map((locker) => (
             <Card key={locker.id} updateCurrentLockerProps={updateCurrentLocker} currentLockerProps={currentLocker}
-              id={locker.id} lockerProps={locker}/>
+              lockerProps={locker} />
           ))
           : null}
       </CardList>

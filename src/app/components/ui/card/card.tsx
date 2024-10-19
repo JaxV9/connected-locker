@@ -4,24 +4,22 @@ import { LockerType } from "@/app/model/locker";
 import {  useEffect, useState } from "react";
 
 type CardPropsType = {
-    id: number,
     lockerProps: LockerType,
-    updateCurrentLockerProps: (id: number | null, isMenuActive: boolean) => void,
-    currentLockerProps: number | null
+    updateCurrentLockerProps: (locker: LockerType | null, isMenuActive: boolean) => void,
+    currentLockerProps: LockerType | null
 };
 
 
-export const Card = ({ id, lockerProps, updateCurrentLockerProps, currentLockerProps }: CardPropsType) => {
+export const Card = ({ lockerProps, updateCurrentLockerProps, currentLockerProps }: CardPropsType) => {
 
-    const [clicked, setClicked] = useState<boolean>(false);
     const [currentBackground, setCurrentBackground] = useState<string>("")
 
 
     const toggle = () => {
-        if(currentLockerProps !== id) {
-            updateCurrentLockerProps(id, true)
+        if(currentLockerProps !== lockerProps) {
+            updateCurrentLockerProps(lockerProps, true)
         }
-        if(currentLockerProps === id){
+        if(currentLockerProps === lockerProps){
             updateCurrentLockerProps(null, false)
         }
     }
@@ -38,21 +36,14 @@ export const Card = ({ id, lockerProps, updateCurrentLockerProps, currentLockerP
         }
     },[lockerProps])
 
-    useEffect(() => {
-        if(currentLockerProps === id) {
-            setClicked(true)
-        } else {
-            setClicked(false)
-        }
-    },[currentLockerProps, id])
 
     return (
         <>
-            <div className={clicked && lockerProps.status === true ? "card-clicked" : "card"}>
-                <div className={clicked && lockerProps.status === false ? "card-container-clicked" : "card-container"} onClick={toggle}
+            <div className={lockerProps === currentLockerProps ? "card-clicked" : "card"}>
+                <div className={lockerProps === currentLockerProps ? "card-container-clicked" : "card-container"} onClick={toggle}
                 style={{ backgroundColor: currentBackground}}>
                     <div className="card-content">
-                        {id}
+                        {lockerProps.id}
                     </div>
                     <div className="handle-locker"></div>
                 </div>

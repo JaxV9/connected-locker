@@ -52,6 +52,34 @@
     transition: all ease 0.2s;
 }
 
+.menu-content {
+    width: 90%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+}
+
+.menu-title {
+    font-size: 18px;
+}
+
+.reserve-btn {
+    background-color: rgb(16, 164, 16);
+    color: rgb(244, 243, 243);
+    border: none;
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all ease 0.2s;
+}
+
+.reserve-btn:hover {
+    background-color: rgb(14, 142, 14);
+    transition: all ease 0.2s;
+}
+
 @media (max-width: 450px) {
 
     .menu-enabled {
@@ -63,6 +91,24 @@
         height: 42px;
         top: 28px;
         left: 28px;
+    }
+
+    .menu-title {
+        font-size: 22px;
+    }
+
+    .menu-content {
+        width: fit-content;
+        height: fit-content;
+        margin: auto;
+    }
+
+    .reserve-btn {
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        font-size: 22px;
+        margin-top: 50px;
     }
 
 }
