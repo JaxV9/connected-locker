@@ -16,7 +16,7 @@
         margin-left: auto;
         margin-right: auto;
         display: grid;
-        grid-template-columns: none;
+        grid-template-columns: 1fr 1fr;
         column-gap: 28px;
         row-gap: 28px;
     }
