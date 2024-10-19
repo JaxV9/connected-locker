@@ -92,7 +92,8 @@ export default function Home() {
 
   return (
     <>
-      <Menu currentUserIdProps={currentUserId} refreshLockerList={fetchLockerList} currentLockerProps={currentLocker} menuIsActiveProps={menuIsActive} handleCloseMenuProps={handleCloseMenu} />
+      <Menu currentUserIdProps={currentUserId} refreshLockerList={fetchLockerList}
+      currentLockerProps={currentLocker} menuIsActiveProps={menuIsActive} handleCloseMenuProps={handleCloseMenu} />
       <CardList >
         {lockerList.length > 0 ?
           lockerList.map((locker) => (
@@ -101,6 +102,12 @@ export default function Home() {
           ))
           : null}
       </CardList>
+      {lockerList.length === 0 ?
+          <span className="load-title">
+            Loading in progress... the back is sometimes very long...
+            Refresh if needed
+          </span>
+          : null}
     </>
   );
 }

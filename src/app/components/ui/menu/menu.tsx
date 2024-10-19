@@ -1,7 +1,7 @@
 'use client';
 
 import { LockerType } from "@/app/model/locker";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type MenuPropsType = {
   currentLockerProps: LockerType | null,
@@ -13,14 +13,13 @@ type MenuPropsType = {
 
 export const Menu = ({ currentUserIdProps, refreshLockerList, currentLockerProps, menuIsActiveProps, handleCloseMenuProps }: MenuPropsType) => {
 
-  const [reservationIsPending, setReservationIsPending] = useState<boolean>(false)
-  const [countDown, setCountDown] = useState<number>(30)
-  const [reservationCompleted, setReservationCompleted] = useState<boolean | null>(null)
+  const [pending, setPending] = useState<boolean>(false)
 
-  const newReservation = async (user: string | undefined | null) => {
+  const editReservation = async (status: boolean, user_id: string | undefined | null) => {
+    setPending(true)
     const body = {
-      "status": false,
-      "user_id": user
+      "status": status,
+      "user_id": user_id
     }
     try {
       await fetch(`https://directus-ucmn.onrender.com/items/locker/${currentLockerProps?.id}`, {
@@ -31,65 +30,14 @@ export const Menu = ({ currentUserIdProps, refreshLockerList, currentLockerProps
         },
         body: JSON.stringify(body)
       })
+
+      refreshLockerList()
+      setPending(false)
+      handleCloseMenuProps()
     } catch {
       console.log("error")
     }
   }
-
-  const fetchLocker = async () => {
-    try {
-      const response = await fetch(`https://directus-ucmn.onrender.com/items/locker/${currentLockerProps?.id}`)
-      const data = await response.json()
-
-      if (data !== undefined && data.data.status === false) {
-        newReservation(null)
-        setReservationCompleted(false)
-      }
-      if (data !== undefined && data.data.status === true) {
-        setReservationCompleted(true)
-      }
-
-    } catch {
-      console.log("error")
-    }
-  }
-
-
-  useEffect(() => {
-    if (countDown > 0 && reservationIsPending === true) {
-      const timer = setInterval(() => {
-        setCountDown((prevCompte) => prevCompte - 1);
-      }, 1000);
-
-      return () => clearInterval(timer);
-    } else {
-      setReservationIsPending(false)
-    }
-  }, [reservationIsPending, countDown, currentUserIdProps]);
-
-  useEffect(() => {
-    if (reservationCompleted === true || reservationCompleted === false) {
-      setReservationCompleted(null)
-    }
-  }, [currentLockerProps]);
-
-  const handleAfterCountDown = async () => {
-    setCountDown(30)
-    refreshLockerList()
-    fetchLocker()
-  }
-
-  useEffect(() => {
-    if (countDown === 0) {
-      handleAfterCountDown()
-    }
-  }, [countDown])
-
-  useEffect(() => {
-    if (reservationIsPending === true) {
-      newReservation(currentUserIdProps)
-    }
-  }, [reservationIsPending])
 
   return (
     <>
@@ -113,20 +61,17 @@ export const Menu = ({ currentUserIdProps, refreshLockerList, currentLockerProps
               : null
           }
           {
-            !currentLockerProps?.status && !reservationIsPending?
-              <button className="reserve-btn" onClick={() => setReservationIsPending(true)}>Take it</button>
+            !currentLockerProps?.status && !pending ?
+              <button className="reserve-btn" onClick={() => editReservation(true, currentUserIdProps)}>Take it</button>
               : null
           }
           {
-            reservationIsPending ?
-              <p>You have {countDown}s to open your locker, with the physical button.</p>
+            currentLockerProps?.status && !pending ?
+              <button className="reserve-btn" onClick={() => editReservation(false, null)}>Free the locker</button>
               : null
           }
-          {reservationCompleted ?
-            <p>The locker is reserved !</p>
-            : null}
-          {reservationCompleted === false ?
-            <p>You don&apos;t have push the button...</p>
+          {pending ?
+            <p className="pending">pending...</p>
             : null}
         </div>
       </div>
