@@ -14,7 +14,7 @@ type MenuPropsType = {
 export const Menu = ({ currentUserIdProps, refreshLockerList, currentLockerProps, menuIsActiveProps, handleCloseMenuProps }: MenuPropsType) => {
 
   const [reservationIsPending, setReservationIsPending] = useState<boolean>(false)
-  const [countDown, setCountDown] = useState<number>(10)
+  const [countDown, setCountDown] = useState<number>(30)
   const [reservationCompleted, setReservationCompleted] = useState<boolean | null>(null)
 
   const newReservation = async (user: string | undefined | null) => {
@@ -74,7 +74,7 @@ export const Menu = ({ currentUserIdProps, refreshLockerList, currentLockerProps
   }, [currentLockerProps]);
 
   const handleAfterCountDown = async () => {
-    setCountDown(10)
+    setCountDown(30)
     refreshLockerList()
     fetchLocker()
   }
