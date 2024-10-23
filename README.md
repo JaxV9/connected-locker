@@ -39,3 +39,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 # Raspberry Python code 
 
 Raspberry code is add in Raspberry folder, for install python code, Install IDE Thonny and connect your raspberry to your computer. Next, save python file in Raspberry pico..
+
+when Python files are saved on raspberry, change ``Token_id`` for link the Locker to the good locker in database 
